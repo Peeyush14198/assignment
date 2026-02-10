@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LoanStatus {
+  ACTIVE
+  CLOSED
+  DEFAULTED
+}
+
+enum CaseStage {
+  SOFT
+  HARD
+  LEGAL
+}
+
+enum CaseStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum AssignmentGroup {
+  Tier1
+  Tier2
+  Legal
+}
+
+enum ActionType {
+  CALL
+  SMS
+  EMAIL
+  WHATSAPP
+}
+
+enum ActionOutcome {
+  NO_ANSWER
+  PROMISE_TO_PAY
+  PAID
+  WRONG_NUMBER
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String   @unique
+  country   String
+  riskScore Int
+  loans     Loan[]
+  cases     Case[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([riskScore], map: "idx_customers_risk_score")
+}
+
+model Loan {
+  id          Int       @id @default(autoincrement())
+  customerId  Int
+  principal   Decimal   @db.Decimal(12, 2)
+  outstanding Decimal   @db.Decimal(12, 2)
+  dueDate     DateTime
+  status      LoanStatus @default(ACTIVE)
+  customer    Customer  @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  cases       Case[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([customerId], map: "idx_loans_customer_id")
+  @@index([status], map: "idx_loans_status")
+}
+
+model Case {
+  id              Int              @id @default(autoincrement())
+  customerId      Int
+  loanId          Int
+  dpd             Int
+  stage           CaseStage        @default(SOFT)
+  status          CaseStatus       @default(OPEN)
+  assignmentGroup AssignmentGroup?
+  assignedTo      String?
+  version         Int              @default(1)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  resolvedAt      DateTime?
+  customer        Customer         @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  loan            Loan             @relation(fields: [loanId], references: [id], onDelete: Restrict)
+  actionLogs      ActionLog[]
+  ruleDecisions   RuleDecision[]
+
+  @@index([status, stage, dpd], map: "idx_cases_status_stage_dpd")
+  @@index([assignedTo], map: "idx_cases_assigned_to")
+  @@index([customerId], map: "idx_cases_customer_id")
+  @@index([loanId], map: "idx_cases_loan_id")
+}
+
+model ActionLog {
+  id        Int           @id @default(autoincrement())
+  caseId     Int
+  type       ActionType
+  outcome    ActionOutcome
+  notes      String?
+  createdAt  DateTime      @default(now())
+  case       Case          @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, createdAt], map: "idx_action_logs_case_created_at")
+}
+
+model RuleDecision {
+  id           Int      @id @default(autoincrement())
+  caseId        Int
+  matchedRules  Json
+  reason        String
+  decisionKey   String  @unique
+  createdAt     DateTime @default(now())
+  case          Case    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, createdAt], map: "idx_rule_decisions_case_created_at")
+}

@@ -1,0 +1,17 @@
+# Node
+node_modules
+dist
+build
+coverage
+.env
+
+# Next.js
+.next/
+out/
+
+# NestJS
+/api/dist
+
+# Misc
+.DS_Store
+*.log

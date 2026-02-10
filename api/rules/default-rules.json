@@ -1,0 +1,51 @@
+[
+  {
+    "code": "DPD_1_7",
+    "description": "DPD between 1 and 7",
+    "priority": 10,
+    "conditions": {
+      "dpdMin": 1,
+      "dpdMax": 7
+    },
+    "actions": {
+      "stage": "SOFT",
+      "assignGroup": "Tier1"
+    }
+  },
+  {
+    "code": "DPD_8_30",
+    "description": "DPD between 8 and 30",
+    "priority": 20,
+    "conditions": {
+      "dpdMin": 8,
+      "dpdMax": 30
+    },
+    "actions": {
+      "stage": "HARD",
+      "assignGroup": "Tier2"
+    }
+  },
+  {
+    "code": "DPD_GT_30",
+    "description": "DPD greater than 30",
+    "priority": 30,
+    "conditions": {
+      "dpdGt": 30
+    },
+    "actions": {
+      "stage": "LEGAL",
+      "assignGroup": "Legal"
+    }
+  },
+  {
+    "code": "RISK_GT_80_OVERRIDE",
+    "description": "Risk score above 80 should be handled by a senior agent",
+    "priority": 100,
+    "conditions": {
+      "riskScoreGt": 80
+    },
+    "actions": {
+      "assignedTo": "SeniorAgent"
+    }
+  }
+]

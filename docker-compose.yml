@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: collections_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: collections
+      POSTGRES_USER: collections
+      POSTGRES_PASSWORD: collections
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U collections -d collections"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: collections_api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      API_PORT: 3001
+      DATABASE_URL: postgresql://collections:collections@postgres:5432/collections?schema=public
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+    ports:
+      - "3001:3001"
+    command: >
+      sh -c "npx prisma migrate deploy &&
+             npm run db:seed &&
+             npm run start:dev"
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: collections_web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      API_BASE_URL: http://api:3001
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3001
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
