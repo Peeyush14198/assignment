@@ -269,7 +269,7 @@ export default async function CasesPage({ searchParams }: CasesPageProps) {
                     <td className="px-6 py-4 font-mono text-slate-600">{caseItem.customer.riskScore}</td>
                     <td className="px-6 py-4 text-right">
                       <Link href={`/cases/${caseItem.id}`}>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-primary-600">
+                        <Button variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:text-primary-600">
                           <Eye className="h-4 w-4" />
                           <span className="sr-only">View Case</span>
                         </Button>
