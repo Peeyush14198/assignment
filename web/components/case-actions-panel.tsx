@@ -49,11 +49,11 @@ export function CaseActionsPanel({
     // We assume API is on port 3001 if header is on 3000, or we use the env var fallback.
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     if (baseUrl) {
-      setPdfUrl(`${baseUrl}/api/cases/${caseId}/notice.pdf`);
+      setPdfUrl(`${baseUrl}/api/cases/${caseId}/notice`);
     } else {
       // Fallback: use current hostname but port 3001
       const hostname = window.location.hostname;
-      setPdfUrl(`http://${hostname}:3001/api/cases/${caseId}/notice.pdf`);
+      setPdfUrl(`http://${hostname}:3001/api/cases/${caseId}/notice`);
     }
   }, [caseId]);
 

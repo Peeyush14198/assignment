@@ -36,7 +36,7 @@ async function bootstrap() {
       'Case management APIs for list/create, rule-based assignment, action logging, dashboard metrics, and PDF reminders.'
     )
     .setVersion('1.0.0')
-    .addServer('http://localhost:3001/api', 'Local development')
+    .addServer('http://localhost:3001', 'Local development')
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);

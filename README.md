@@ -9,7 +9,7 @@ A full-stack delinquency collections case manager with:
 - **Unified Case Creation**: Create a customer, loan, and case in a single workflow.
 - **Action Logging**: Record "Call", "SMS", "Email", or "WhatsApp" interactions.
 - **Rule-Based Assignment**: Automatically assign cases to "High Value" or "Standard" groups based on rules.
-- **Notice Generation**: Generate PDF notices for cases.
+- **Notice Generation**: Generate PDF payment reminder notices (Invoices) using Puppeteer.
 - **Dashboard**: View key metrics and filter cases by status, stage, and DPD.
 
 ## Repository Structure
@@ -93,7 +93,7 @@ Suggested flow for quick validation from Swagger UI:
 - `GET /api/cases/:id` - case detail
 - `POST /api/cases/:id/actions` - add action log
 - `POST /api/cases/:id/assign` - run assignment engine
-- `GET /api/cases/:id/notice.pdf` - generate payment reminder PDF
+- `GET /api/cases/:id/notice` - generate payment reminder PDF
 - `GET /api/metrics` - dashboard metrics
 
 ## Lint, Build, Test

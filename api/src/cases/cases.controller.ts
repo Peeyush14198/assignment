@@ -140,11 +140,11 @@ export class CasesController {
     return this.casesService.assignCase(caseId, dto);
   }
 
-  @Get(':id/notice.pdf')
-  @ApiOperation({ summary: 'Generate a payment reminder PDF for the case.' })
+  @Get(':id/notice')
+  @ApiOperation({ summary: 'Generate and stream a payment reminder PDF for the case.' })
   @ApiParam({ name: 'id', type: Number })
   @ApiOkResponse({
-    description: 'PDF generated.',
+    description: 'PDF file (binary stream).',
     content: {
       'application/pdf': {
         schema: {
