@@ -60,7 +60,14 @@ export class NoticeService {
       return process.env.PUPPETEER_EXECUTABLE_PATH;
     }
 
-    const knownCandidates = ['/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome'];
+    const knownCandidates = [
+      process.env.PUPPETEER_EXECUTABLE_PATH,
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/google-chrome',
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      '/Applications/Chromium.app/Contents/MacOS/Chromium'
+    ];
     return knownCandidates.find((candidate) => {
       try {
         return Boolean(statSync(candidate));

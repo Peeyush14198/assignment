@@ -36,9 +36,9 @@ export default async function CaseDetailsPage({ params }: CaseDetailsPageProps) 
               <h1 className="text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
                 Case #{caseData.id}
                 <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${caseData.status === 'OPEN' ? 'bg-blue-100 text-blue-700' :
-                    caseData.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-700' :
-                      caseData.status === 'RESOLVED' ? 'bg-emerald-100 text-emerald-700' :
-                        'bg-slate-100 text-slate-700'
+                  caseData.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-700' :
+                    caseData.status === 'RESOLVED' ? 'bg-emerald-100 text-emerald-700' :
+                      'bg-slate-100 text-slate-700'
                   }`}>
                   {caseData.status}
                 </span>
@@ -119,41 +119,7 @@ export default async function CaseDetailsPage({ params }: CaseDetailsPageProps) 
               </Card>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Activity Log</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead className="bg-slate-50 border-b border-slate-200">
-                      <tr>
-                        <th className="px-4 py-2 font-medium text-slate-500">Type</th>
-                        <th className="px-4 py-2 font-medium text-slate-500">Outcome</th>
-                        <th className="px-4 py-2 font-medium text-slate-500">Notes</th>
-                        <th className="px-4 py-2 font-medium text-slate-500">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {caseData.actionLogs.length === 0 ? (
-                        <tr>
-                          <td colSpan={4} className="px-4 py-8 text-center text-slate-500">No actions recorded yet.</td>
-                        </tr>
-                      ) : (
-                        caseData.actionLogs.map(log => (
-                          <tr key={log.id}>
-                            <td className="px-4 py-2 font-medium">{log.type}</td>
-                            <td className="px-4 py-2">{log.outcome}</td>
-                            <td className="px-4 py-2 text-slate-600 max-w-xs truncate" title={log.notes || ''}>{log.notes || '-'}</td>
-                            <td className="px-4 py-2 text-slate-500 text-xs">{new Date(log.createdAt).toLocaleString()}</td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
+
 
             <Card>
               <CardHeader>
@@ -216,6 +182,7 @@ export default async function CaseDetailsPage({ params }: CaseDetailsPageProps) 
               caseId={caseData.id}
               initialVersion={caseData.version}
               apiBaseUrl={getApiBaseUrl()}
+              actionLogs={caseData.actionLogs}
             />
           </div>
         </div>

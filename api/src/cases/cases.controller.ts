@@ -7,7 +7,8 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  Res
+  Res,
+  StreamableFile
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -181,11 +182,11 @@ export class CasesController {
   ) {
     const pdfBytes = await this.casesService.generateNoticePdf(caseId);
 
-    response.setHeader(
-      'Content-Disposition',
-      `inline; filename="case-${caseId}-payment-reminder.pdf"`
-    );
+    response.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `inline; filename="case-${caseId}-payment-reminder.pdf"`
+    });
 
-    return pdfBytes;
+    return new StreamableFile(pdfBytes);
   }
 }

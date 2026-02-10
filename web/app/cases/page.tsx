@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { Eye, Plus } from 'lucide-react';
 
 import { getCases, getMetrics, type CaseRecord } from '../../lib/api';
 import { Button, buttonVariants } from '../../components/ui/button';
@@ -211,18 +211,19 @@ export default async function CasesPage({ searchParams }: CasesPageProps) {
                 <th className="px-6 py-3 font-medium text-slate-500">Assigned To</th>
                 <th className="px-6 py-3 font-medium text-slate-500">Created At</th>
                 <th className="px-6 py-3 font-medium text-slate-500">Risk Score</th>
+                <th className="px-6 py-3 font-medium text-slate-500 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {casesResponse.data.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={9} className="px-6 py-12 text-center text-slate-500">
                     No matching cases found.
                   </td>
                 </tr>
               ) : (
                 casesResponse.data.map((caseItem: CaseRecord) => (
-                  <tr key={caseItem.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={caseItem.id} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="px-6 py-4">
                       <Link
                         href={`/cases/${caseItem.id}`}
@@ -231,7 +232,14 @@ export default async function CasesPage({ searchParams }: CasesPageProps) {
                         #{caseItem.id}
                       </Link>
                     </td>
-                    <td className="px-6 py-4 font-medium text-slate-900">{caseItem.customer.name}</td>
+                    <td className="px-6 py-4 font-medium text-slate-900">
+                      <Link
+                        href={`/cases/${caseItem.id}`}
+                        className="hover:text-primary-600 hover:underline decoration-slate-400 underline-offset-4 decoration-dotted"
+                      >
+                        {caseItem.customer.name}
+                      </Link>
+                    </td>
                     <td className="px-6 py-4 text-slate-600">{caseItem.dpd}</td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
@@ -259,6 +267,14 @@ export default async function CasesPage({ searchParams }: CasesPageProps) {
                     </td>
                     <td className="px-6 py-4 text-slate-600">{new Date(caseItem.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4 font-mono text-slate-600">{caseItem.customer.riskScore}</td>
+                    <td className="px-6 py-4 text-right">
+                      <Link href={`/cases/${caseItem.id}`}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-primary-600">
+                          <Eye className="h-4 w-4" />
+                          <span className="sr-only">View Case</span>
+                        </Button>
+                      </Link>
+                    </td>
                   </tr>
                 ))
               )}
